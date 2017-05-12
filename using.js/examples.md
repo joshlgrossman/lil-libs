@@ -32,3 +32,16 @@ ES6 w/ arrow functions
       .pipe(o => `c: ${o.c}`)
       .then(v => console.log(v))
       .end();
+
+Other examples:
+
+    using('test')
+      .pipe(s => s.length)
+      .when(l => l > 3)
+      .reset()
+      .pipe(s => s.substring(0,3))
+      .otherwise()
+      .pipe((l,s) => s + '#'.repeat(3-l))
+      .finally()
+      .then(console.log)
+      .end();

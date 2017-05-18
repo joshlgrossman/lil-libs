@@ -9,7 +9,7 @@ function promisify(func){
       try {
         func.apply(self, as);
       } catch (e) {
-        reject();
+        reject(e);
       }
     });
   }

@@ -32,6 +32,8 @@ function template(str, onChange){
     }
   });
 
+  onChange(obj.template);
+  
   return obj;
 
 }

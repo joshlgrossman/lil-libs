@@ -7,7 +7,7 @@ function template(str, onChange){
     var val = def || 0;
     return function(newVal){
       if(newVal !== undefined) {
-        val = newVal;
+        val = newVal || def;
         onChange(obj.template);
       }
       return val;

@@ -8,6 +8,7 @@ function template(str, onChange){
       callbacks.push(arg);
     else if(typeof arg === 'object')
       for(var i in arg) obj[i] = arg[i];
+    return obj;
   };
 
   function change(){

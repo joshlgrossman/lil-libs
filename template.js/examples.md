@@ -1,8 +1,14 @@
 Allows one way data binding from variables -> a templated string.
 
-    template( template:string | {template:string,throttle:boolean,change:function} [, change:function])
+    template( template:string | options:object [, change:function(string)])
     
-    templateObj( properties:object | change:function )
+    options = {
+        template:string // templated string to compile
+        throttled:boolean // whether or not to throttle changes [optional - default: false]
+        change:function(string) // on-change callback [optional - default:undefined]
+    }
+    
+    templateObj( properties:object | change:function(string) )
     
 Examples:
 

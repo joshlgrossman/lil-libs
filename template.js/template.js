@@ -13,11 +13,11 @@ function template(str, onChange){
 
   function change(){
     for(var i = 0; i < callbacks.length; i++)
-      callbacks[i](obj.template);
+      callbacks[i](obj.compiled);
   }
 
   function parse(v){
-    return v.replace(re,'$1').split('|').map(part => part.trim());
+    return v.replace(re,'$1').split('|').map(function(part){ return part.trim() });
   }
 
   function prop(def){
@@ -37,7 +37,7 @@ function template(str, onChange){
     Object.defineProperty(obj, arr[0], {get:p, set:p});
   }
 
-  Object.defineProperty(obj, 'template', {
+  Object.defineProperty(obj, 'compiled', {
     get: function(){
       var res = str;
       for(var v in vars){

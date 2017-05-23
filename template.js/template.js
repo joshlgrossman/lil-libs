@@ -21,7 +21,7 @@ function template(str, onChange){
   }
 
   function prop(def){
-    var val = def || 0;
+    var val = def || '';
     return function(newVal){
       if(newVal !== undefined) {
         val = newVal || def;

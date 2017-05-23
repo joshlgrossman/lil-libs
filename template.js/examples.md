@@ -1,3 +1,7 @@
+    template( template:string | {template:string,throttle:boolean,change:function} [, change:function])
+    
+    templateObj( properties:object | change:function )
+
 Allows one way data binding from variables -> a templated string.
 
     var myTemplate = template('#{greeting | Hello} my name is #{name | anonymous}', string => {
@@ -20,8 +24,23 @@ Allows one way data binding from variables -> a templated string.
         console.log('this is a second onChange listener ' + string);
     });
 
-Variable format:
+When assigned falsey value, variable will revert to default value.  Variable format:
 
     #{variableName | default value}
 
-When assigned falsey value, variable will revert to default value.
+Throttled changes:
+
+    var myTemplate2 = template({
+        template: '<div class="#{className}">#{text}</div>',
+        throttle: true,
+        change: function(string){
+            myDOMNode.innerHTML = string;
+        }
+    });
+    
+    myTemplate2({
+        className: 'shown',
+        text: 'These updates will both be applied at the same time'
+    });
+
+    

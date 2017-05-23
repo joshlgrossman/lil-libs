@@ -1,16 +1,19 @@
 function template(str, onChange){
 
-  if(typeof str === 'object' && typeof onChange === 'object'){
-    for(var i in onChange){
-      str[i] = onChange[i];
-    }
-    return;
-  }
-
-  onChange = onChange || function(){};
+  var callbacks = onChange ? [onChange] : [];
   var re = /\#\{(\s*[a-zA-Z_$][a-zA-Z_$0-9]*\s*(\|[^}]*)?)\}/g;
   var vars = str.match(re);
-  var obj = {};
+  var obj = function(arg){
+    if(typeof arg === 'function')
+      callbacks.push(arg);
+    else if(typeof arg === 'object')
+      for(var i in arg) obj[i] = arg[i];
+  };
+
+  function change(){
+    for(var i = 0; i < callbacks.length; i++)
+      callbacks[i](obj.template);
+  }
 
   function parse(v){
     return v.replace(re,'$1').split('|').map(part => part.trim());
@@ -21,7 +24,7 @@ function template(str, onChange){
     return function(newVal){
       if(newVal !== undefined) {
         val = newVal || def;
-        onChange(obj.template);
+        change();
       }
       return val;
     }
@@ -44,7 +47,7 @@ function template(str, onChange){
     }
   });
 
-  onChange(obj.template);
+  change();
 
   return obj;
 

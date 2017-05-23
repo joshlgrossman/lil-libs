@@ -9,12 +9,16 @@ Allows one way data binding from variables -> a templated string.
     myTemplate.name = 'Josh'; // console will log 'Hello my name is Josh'
     myTemplate.greeting = 'Hey'; // console will log 'Hey my name is Josh'
 
-    template(myTemplate, {
+    myTemplate({
       greeting: 'Hi',
       name: ''
     });
 
     // console will log 'Hi my name is anonymous'
+    
+    myTemplate(string => {
+        console.log('this is a second onChange listener ' + string);
+    });
 
 Variable format:
 

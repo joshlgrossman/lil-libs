@@ -10,7 +10,7 @@ function template(str, onChange){
   var re = /\#\{(\s*[a-zA-Z_$][a-zA-Z_$0-9]*\s*(\|[^}]*)?)\}/g;
   var vars = str.match(re);
   var obj = {};
-  onChange = onChange.bind(obj) || function(){};
+  onChange = typeof onChange === 'function' ? onChange.bind(obj) : function(){};
 
   function parse(v){
     return v.replace(re,'$1').split('|').map(part => part.trim());

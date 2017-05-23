@@ -1,7 +1,20 @@
 function template(str, onChange){
-  var re = /\$\{([a-zA-Z_$][a-zA-Z_$0-9]*(\|[^}]*)?)\}/g;
+
+  if(typeof str === 'object' && typeof onChange === 'object'){
+    for(var i in onChange){
+      str[i] = onChange[i];
+    }
+    return;
+  }
+
+  onChange = onChange || function(){};
+  var re = /\#\{(\s*[a-zA-Z_$][a-zA-Z_$0-9]*\s*(\|[^}]*)?)\}/g;
   var vars = str.match(re);
   var obj = {};
+
+  function parse(v){
+    return v.replace(re,'$1').split('|').map(part => part.trim());
+  }
 
   function prop(def){
     var val = def || 0;
@@ -15,7 +28,7 @@ function template(str, onChange){
   }
 
   for(var v in vars){
-    var arr = vars[v].replace(re, '$1').split('|');
+    var arr = parse(vars[v]);
     var p = prop(arr[1]);
     Object.defineProperty(obj, arr[0], {get:p, set:p});
   }
@@ -24,8 +37,7 @@ function template(str, onChange){
     get: function(){
       var res = str;
       for(var v in vars){
-        var arr = vars[v].replace(re, '$1').split('|');
-        var val = obj[arr[0]];
+        var val = obj[parse(vars[v])[0]];
         res = res.replace(vars[v], val);
       }
       return res;
@@ -33,7 +45,7 @@ function template(str, onChange){
   });
 
   onChange(obj.template);
-  
+
   return obj;
 
 }

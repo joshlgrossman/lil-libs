@@ -15,6 +15,8 @@ Mini dependency injection lib
     })
 
     di('x', require => 10)
-    di('y', require => 5)
+    di('y', (require, module) => {
+        module.exports = 5 // also supports CommonJS module.exports
+    })
     
 When run, this will print "10 + 5 = 15"

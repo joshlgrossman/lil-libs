@@ -7,8 +7,12 @@ Mini dependency injection lib
       console.log(func(x))
     })
     
-    di('func', function(require, val){
-      return 'The value is ' + val
+    di('func', function(require){
+      return function(val){
+        return 'The value is ' + val;
+      }
     })
     
-    di('x', 10)
+    di('x', function(){
+        return 10;
+    })

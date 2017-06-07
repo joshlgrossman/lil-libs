@@ -1,6 +1,6 @@
 Mini dependency injection lib
 
-    di(require => {
+    di(require => { // module without name is considered entry point
         var x = require('x')
         var func = require('func')
 

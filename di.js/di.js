@@ -1,13 +1,17 @@
 function di(name, def){
+  function req(n){
+    var module = {exports:{}};
+    return di[n](module) || module.exports;
+  }
   if(typeof name === 'function'){
-    setTimeout(name.bind(null, function(n){ return di[n](); }), 0);
+    setTimeout(name.bind(null, req), 0);
   } else {
     if(def){
       if(di[name]) throw new Error("Duplicate module definitions for " + name);
       else di[name] = def.bind(null, function(n){
-        if(n !== name) return di[n]();
+        if(n !== name) return req(n);
         else throw new Error("Cannot require same module " + n);
       });
-    } else return di[name]();
+    } else return req(name);
   }
 }

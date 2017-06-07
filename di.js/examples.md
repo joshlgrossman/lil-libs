@@ -1,18 +1,20 @@
 Mini dependency injection lib
 
-    di(function(require){
-      var x = require('x')
-      var func = require('func')
-      
-      console.log(func(x))
+    di(require => {
+        var x = require('x')
+        var func = require('func')
+
+        console.log(func(x))
     })
+
+    di('func', require => {
+        var y = require('y') // imports module y from below
+        return function(x){  // the exported value of the module
+            return `${x} + ${y} = ${x+y}`
+        }
+    })
+
+    di('x', require => 10)
+    di('y', require => 5)
     
-    di('func', function(require){
-      return function(val){
-        return 'The value is ' + val;
-      }
-    })
-    
-    di('x', function(){
-        return 10;
-    })
+When run, this will print "10 + 5 = 15"

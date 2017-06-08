@@ -4,7 +4,8 @@ function di(name, def){
     return di[n](module) || module.exports;
   }
   if(typeof name === 'function'){
-    window.addEventListener('load', name.bind(null, req));
+    if(document.readyState === 'complete') name(req);
+    else window.addEventListener('load', name.bind(null, req));
   } else {
     if(def){
       if(di[name]) throw new Error("Duplicate module definitions for " + name);

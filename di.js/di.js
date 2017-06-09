@@ -1,11 +1,13 @@
 function di(name, def){
+  if(!name && !def) return;
   function req(n){
     var module = {exports:{}};
     return di[n](module) || module.exports;
   }
-  if(typeof name === 'function'){
-    if(document.readyState === 'complete') name(req);
-    else window.addEventListener('load', name.bind(null, req));
+  if(typeof name === 'function') name = (def = name).name;
+  if(!name || name === 'main'){
+    if(document.readyState === 'complete') def(req);
+    else window.addEventListener('load', def.bind(null, req));
   } else {
     if(def){
       if(di[name]) throw new Error("Duplicate module definitions for " + name);

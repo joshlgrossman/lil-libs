@@ -1,4 +1,4 @@
-Collection of useless libraries that I make when I'm bored
+Collection of (mostly) useless libraries that I make when I'm bored
 ===
 
 bind.js

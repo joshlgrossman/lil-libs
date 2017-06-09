@@ -1,4 +1,5 @@
 Mini dependency injection lib
+============================
 
     di(require => { // module without name or with name 'main' is considered entry point
         var x = require('x')
@@ -24,3 +25,21 @@ Mini dependency injection lib
     })
     
 When run, this will print "10 + 5 = 15"
+
+Preferred style:
+===============
+
+main.js:
+
+    di(main)
+    function main(require, module){
+        var a = require('a');
+        console.log(a);
+    }
+    
+a.js:
+
+    di(a)
+    function a(require, module){
+        module.exports = 'Hello world';
+    }

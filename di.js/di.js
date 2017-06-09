@@ -1,20 +1,23 @@
-function di(name, def){
-  if(!name && !def) return;
+function di(nm, def){
+  if(!nm && !def) return;
   function req(n){
-    var module = {exports:{}};
-    return di[n](module) || module.exports;
+    try {
+      var module = {exports:{}};
+      return di[n](module) || module.exports;
+    } catch(e) { throw new Error("Module " + n + " could not be imported"); }
   }
-  if(typeof name === 'function') name = (def = name).name;
-  if(!name || name === 'main'){
-    if(document.readyState === 'complete') def(req);
-    else window.addEventListener('load', def.bind(null, req));
+  if(typeof nm === 'function') nm = (def = nm).name;
+  if(!nm || nm === 'main'){
+    def = def.bind(null,req);
+    if(document.readyState === 'complete') setTimeout(def, 0);
+    else window.addEventListener('load', def);
   } else {
     if(def){
-      if(di[name]) throw new Error("Duplicate module definitions for " + name);
-      else di[name] = def.bind(null, function(n){
-        if(n !== name) return req(n);
+      if(di[nm]) throw new Error("Duplicate module definitions for " + nm);
+      else di[nm] = def.bind(null, function(n){
+        if(n !== nm) return req(n);
         else throw new Error("Cannot require same module " + n);
       });
-    } else return req(name);
+    } else return req(nm);
   }
 }

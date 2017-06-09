@@ -30,7 +30,7 @@ In file `myValueA.js`:
 
 In file `myValueB.js`:
 
-    dependency('myValueB')
+    dependency(myValueB)
     function myValueB(require, module){
       module.exports = 'World';
     }

@@ -1,9 +1,9 @@
-function dependency(nm, def){
+function module(nm, def){
   if(!nm && !def) return;
   function req(n){
     try {
-      var module = {exports:{}};
-      return dependency[n](module) || module.exports;
+      var mdl = {exports:{}};
+      return module[n].cache || (module[n].cache = module[n](mdl) || mdl.exports)
     } catch(e) { throw new Error("Module " + n + " could not be imported"); }
   }
   if(typeof nm === 'function') nm = (def = nm).name;
@@ -13,8 +13,8 @@ function dependency(nm, def){
     else window.addEventListener('load', def);
   } else {
     if(def){
-      if(dependency[nm]) throw new Error("Duplicate module definitions for " + nm);
-      else dependency[nm] = def.bind(null, function(n){
+      if(module[nm]) throw new Error("Duplicate module definitions for " + nm);
+      else module[nm] = def.bind(null, function(n){
         if(n !== nm) return req(n);
         else throw new Error("Cannot require same module " + n);
       });

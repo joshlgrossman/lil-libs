@@ -3,7 +3,7 @@ Tiny front-end implementation of CommonJS module pattern
 
 In file `main.js`:
 
-    dependency(main)
+    module(main)
     function main(require, module){
       const myFunction = require('myFunction');
       const myValueB = require('myValueB');
@@ -13,7 +13,7 @@ In file `main.js`:
 
 In file `myFunction.js`:
 
-    dependency(myFunction)
+    module(myFunction)
     function myFunction(require, module){
       const myValueA = require('myValueA');
       module.exports = function(x){
@@ -23,16 +23,16 @@ In file `myFunction.js`:
 
 In file `myValueA.js`:
 
-    dependency(myValueA)
+    module(myValueA)
     function myValueA(require, module){
       module.exports = 'Hello';
     }
 
 In file `myValueB.js`:
 
-    dependency(myValueB)
+    module(myValueB)
     function myValueB(require, module){
       module.exports = 'World';
     }
 
-When these files are put on a page (in any order, so long as `dependency.js` comes before all of them), the console will log 'Hello World'
+When these files are put on a page (in any order, so long as `module.js` comes before all of them), the console will log 'Hello World'

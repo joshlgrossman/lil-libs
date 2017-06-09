@@ -10,7 +10,7 @@ Mini dependency injection lib
     di('func', require => {
         var z = require('z') // imports module z from below
         return function(x){  // the exported value of the module
-            return `${x} + ${y} = ${x+y}`
+            return `${x} + ${z} = ${x+z}`
         }
     })
 

@@ -19,7 +19,7 @@ Mini dependency injection lib
         module.exports = 5 // also supports CommonJS module.exports
     })
     
-    di(function z(require){ // named functions can be used in place of a string for module name
+    di(function z(require, module){ // named functions can be used in place of a string for module name
         module.exports = require('y')
     })
     

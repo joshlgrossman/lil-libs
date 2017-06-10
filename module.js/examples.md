@@ -1,7 +1,7 @@
 Tiny front-end implementation of CommonJS module pattern
 ===
 
-In file `main.js`:
+In file `main.js` (the module with the name 'main' will be used as the entry point):
 
     module(main)
     function main(require, module){

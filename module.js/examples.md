@@ -36,3 +36,7 @@ In file `myValueB.js`:
     }
 
 When these files are put on a page (in any order, so long as `module.js` comes before all of them), the console will log 'Hello World'
+
+Modules can also be defined with a name string and a function definition.  Returning a value from the function is equivalent to exporting it with `module.exports`.  This makes adding module support to an existing library easy, just add a module definition at the top of the library:
+
+    module('template', function(){ return template });

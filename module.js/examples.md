@@ -17,7 +17,7 @@ In file `myFunction.js`:
     function myFunction(require, module){
       const myValueA = require('myValueA');
       module.exports = function(x){
-          return myValueA + ' ' + x;
+          return myValueA + ' ' + x;
       };
     }
 

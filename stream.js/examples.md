@@ -1,34 +1,45 @@
 Functional-style event handlers
 ===
 
+Example 1:
+--
 ```js
 var myButton = document.getElementById('myButton');
-var myStream = stream(myButton)
-    .on('click')
+stream(myButton)  // create stream from element
+    .on('click')  // stream specific event
     .then(function(evt){
-      this.classList.add('clicked'); // 'this' bound to element
-      console.log(evt.pageX, evt.pageY);
-      return {x: evt.pageX, y: evt.pageY}; // event is standard JS event
+      this.classList.add('clicked'); // `this` bound to DOM element
     })
-    .pipe(function(point){ // pipe value in from previous
-      var x = point.x;
-      var y = point.y;
-      return Math.sqrt(x*x + y*y);
+    .map(evt => evt.pageX) // map and pipe data
+    .filter(x => x > 100) // filter stream
+    .forEach(x => { // iterate over streamed events
+      console.log(x);
+      throw new Error('an error');
     })
-    .pipe(function(dist){
-      if(dist > 10) throw new Error('too big!');
+    .then(() => {
+      console.log('this will not execute');
     })
-    .catch(function(err){ // catch errors
-      console.error(err);
+    .catch(err => console.log(`The error was ${err}`)) // catch errors
+    .then(evt => { // resume from initial event emitted
+      console.log(evt.pageY);
     })
-    .then(function(evt){ // resume from initial event
-      console.log(evt.pageX, evt.pageY);
+    .and
+    .on('keydown') // stream new event
+    .filter(ke => ke.which === 65)
+    .forEach(() => console.log('A was pressed'));
+```
+
+Example 2:
+--
+```js
+var myButton1 = document.querySelector('#myButton1');
+var myButton2 = document.querySelector('#myButton2');
+stream('click') // create stream from event type
+    .then(function(){
+      this.classList.add('clicked');
     })
-    .and.on('keydown')  // stream different event
-    .then(function(evt){
-      if(evt.which === 65) {
-        console.log('A pressed on button');
-        myStream.off(); // kill event stream
-      }
-    });
+    .from(myButton1) // stream from element
+    .and
+    .from(myButton2); // and another element
+    
 ```

@@ -56,10 +56,8 @@ var stream = function(){
     };
 
     this.from = function(el){
-      if(!element) {
-        element = el;
-        addHandlers();
-      }
+      element = el;
+      addHandlers();
       return _this;
     };
 
@@ -107,6 +105,12 @@ var stream = function(){
       configurable: false,
       enumerable: false,
       get: function(){ return new Stream(element, event, []); }
+    });
+
+    Object.defineProperty(this, 'or', {
+      configurable: false,
+      enumerable: false,
+      get: function(){ return new Stream(element, event, handlers); }
     });
   }
 

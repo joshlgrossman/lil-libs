@@ -39,7 +39,7 @@ stream('click') // create stream from event type
       this.classList.add('clicked');
     })
     .from(myButton1) // stream from element
-    .and
+    .or
     .from(myButton2); // and another element
     
 ```

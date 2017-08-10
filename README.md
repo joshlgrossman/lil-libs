@@ -9,6 +9,9 @@ A tiny, front-end implementation of CommonJS require/module pattern
 _*template.js*_:
 One way data-binding to a templated string
 
+_*stream.js*_:
+Event-handler functional chaining
+
 Kind of useful libraries:
 ---
 _*bind.js*_:

@@ -42,32 +42,7 @@ var stream = function(){
       return _this;
     };
 
-    function addHandlers() {
-      if(element && event) element.addEventListener(event, handlers.all);
-    }
-
-    function removeHandlers() {
-      if(element && event) element.removeEventListener(event, handlers.all);
-    }
-
-    this.close = function(){
-      removeHandlers();
-      return _this;
-    };
-
-    this.from = function(el){
-      element = el;
-      addHandlers();
-      return _this;
-    };
-
-    this.on = function(evt){
-      event = evt;
-      addHandlers();
-      return _this;
-    };
-
-    handlers.all = function(evt){
+    function handle(evt){
       var err = null, val = evt;
       loop: for(var i = 0; i < handlers.length; i++) {
         var handler = handlers[i];
@@ -99,6 +74,31 @@ var stream = function(){
           err = ex;
         }
       }
+    }
+
+    function addHandlers() {
+      if(element && event) element.addEventListener(event, handle);
+    }
+
+    function removeHandlers() {
+      if(element && event) element.removeEventListener(event, handle);
+    }
+
+    this.close = function(){
+      removeHandlers();
+      return _this;
+    };
+
+    this.from = function(el){
+      element = el;
+      addHandlers();
+      return _this;
+    };
+
+    this.on = function(evt){
+      event = evt;
+      addHandlers();
+      return _this;
     };
 
     Object.defineProperty(this, 'and', {

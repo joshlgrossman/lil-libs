@@ -47,8 +47,8 @@ stream(myButton)
     .filter(k => k === 65 || k === 97)
     .then(() => {
       console.log(
-        'this will only log if clicked for more than 1 sec and then A pressed';
-      )
+        'this will only log if clicked for more than 1 sec and then A pressed'
+      );
     });
 ```
 

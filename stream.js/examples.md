@@ -32,14 +32,23 @@ stream(myButton)  // create stream from element
 Example 2:
 --
 ```js
+var time;
 var myButton = document.querySelector('#myButton');
 stream(myButton)
-    .on('click')
-    .map(evt => evt.pageX)
-    .forEach(console.log)
-    .when('mouseout') // listen for sequence of events
+    .on('mousedown')
+    .then(() => time = Date.now())
+    .when('mouseup')   // listen for sequence of events
+    .filter(() => (Date.now() - time) > 1000)
+    .then(function(){
+      this.classList.add('slow-clicked');
+    })
+    .when('keypress')
+    .map(ke => ke.which)
+    .filter(k => k === 65 || k === 97)
     .then(() => {
-      console.log('clicked and then moused-out');
+      console.log(
+        'this will only log if clicked for more than 1 sec and then A pressed';
+      )
     });
 ```
 

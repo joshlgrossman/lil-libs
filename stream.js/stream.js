@@ -2,6 +2,7 @@ var stream = function(){
 
   function Stream(element, event, handlers){
     var _this = this;
+    var once = false;
     this.filter = function(func){
       handlers.push({
         type: 'filter',
@@ -42,6 +43,19 @@ var stream = function(){
       return _this;
     };
 
+    this.when = function(evt){
+      var stream = new Stream(null, null, []);
+      stream.once(evt);
+      handlers.push({
+        type: 'when',
+        func: function(){
+          stream.from(element);
+          return stream;
+        }
+      });
+      return stream;
+    };
+
     function handle(evt){
       var err = null, val = evt;
       loop: for(var i = 0; i < handlers.length; i++) {
@@ -68,12 +82,16 @@ var stream = function(){
               func.call(element, evt);
               val = evt;
               break;
+            case 'when':
+              func();
+              break;
           }
           err = null;
         } catch(ex) {
           err = ex;
         }
       }
+      if(once) _this.close();
     }
 
     function addHandlers() {
@@ -99,6 +117,11 @@ var stream = function(){
       event = evt;
       addHandlers();
       return _this;
+    };
+
+    this.once = function(evt){
+      once = true;
+      return _this.on(evt);
     };
 
     Object.defineProperty(this, 'and', {

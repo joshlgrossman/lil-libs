@@ -32,6 +32,20 @@ stream(myButton)  // create stream from element
 Example 2:
 --
 ```js
+var myButton = document.querySelector('#myButton');
+stream(myButton)
+    .on('click')
+    .map(evt => evt.pageX)
+    .forEach(console.log)
+    .when('mouseout') // listen for sequence of events
+    .then(() => {
+      console.log('clicked and then moused-out');
+    });
+```
+
+Example 3:
+--
+```js
 var myButton1 = document.querySelector('#myButton1');
 var myButton2 = document.querySelector('#myButton2');
 stream('click') // create stream from event type

@@ -3,58 +3,6 @@ var stream = function(){
   function Stream(element, event, handlers){
     var _this = this;
     var once = false;
-    this.filter = function(func){
-      handlers.push({
-        type: 'filter',
-        func: func
-      });
-      return _this;
-    };
-
-    this.map = function(func){
-      handlers.push({
-        type: 'map',
-        func: func
-      });
-      return _this;
-    };
-
-    this.forEach = function(func){
-      handlers.push({
-        type: 'forEach',
-        func: func
-      });
-      return _this;
-    };
-
-    this.then = function(func){
-      handlers.push({
-        type: 'then',
-        func: func
-      });
-      return _this;
-    };
-
-    this['catch'] = function(func){
-      handlers.push({
-        type: 'catch',
-        func: func
-      });
-      return _this;
-    };
-
-    this.when = function(evt){
-      var stream = new Stream(null, null, []);
-      stream.once(evt);
-      handlers.push({
-        type: 'when',
-        func: function(){
-          stream.from(element);
-          return stream;
-        }
-      });
-      return stream;
-    };
 
     function handle(evt){
       var err = null, val = evt;
@@ -83,7 +31,7 @@ var stream = function(){
               val = evt;
               break;
             case 'when':
-              func();
+              func(val);
               break;
           }
           err = null;
@@ -94,6 +42,83 @@ var stream = function(){
       if(once) _this.close();
     }
 
+    this['if'] = this.filter = function(func){
+      handlers.push({
+        type: 'filter',
+        func: func
+      });
+      return _this;
+    };
+
+    this.pipe = this.map = function(func){
+      handlers.push({
+        type: 'map',
+        func: func
+      });
+      return _this;
+    };
+
+    this.each = this.forEach = function(func){
+      handlers.push({
+        type: 'forEach',
+        func: func
+      });
+      return _this;
+    };
+
+    this.then = function(func){
+      handlers.push({
+        type: 'then',
+        func: func
+      });
+      return _this;
+    };
+
+    this['catch'] = function(func){
+      handlers.push({
+        type: 'catch',
+        func: func
+      });
+      return _this;
+    };
+
+    this.when = function(evt){
+      var init = {
+        type: 'map',
+        func: function(val){ return val; }
+      };
+      var stream = new Stream(null, null, [init]);
+      stream.once(evt);
+      handlers.push({
+        type: 'when',
+        func: function(val){
+          init.func = function(){ return val; }
+          stream.from(element);
+          return stream;
+        }
+      });
+      return stream;
+    };
+
+    this.throttle = function(ms){
+      var throttled = false;
+      handlers.push({
+        type: 'filter',
+        func: function(){
+          if(throttled) {
+            return false;
+          } else {
+            throttled = true;
+            setTimeout(function () {
+              throttled = false;
+            }, +ms);
+            return true;
+          }
+        }
+      });
+      return _this;
+    };
+
     function addHandlers() {
       if(element && event) element.addEventListener(event, handle);
     }
@@ -102,7 +127,7 @@ var stream = function(){
       if(element && event) element.removeEventListener(event, handle);
     }
 
-    this.close = function(){
+    this.off = this.close = function(){
       removeHandlers();
       return _this;
     };

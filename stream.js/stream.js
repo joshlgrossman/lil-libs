@@ -82,7 +82,7 @@ var stream = function(){
       return _this;
     };
 
-    this.when = function(evt){
+    this.until = this.when = function(evt){
       var init = {
         type: 'map',
         func: function(val){ return val; }

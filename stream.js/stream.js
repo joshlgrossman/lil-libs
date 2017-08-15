@@ -3,11 +3,12 @@ var stream = function(){
   function Stream(element, event, handlers){
     var _this = this;
     var once = false;
+    var index = 0;
 
     function handle(evt){
       var err = null, val = evt;
-      loop: for(var i = 0; i < handlers.length; i++) {
-        var handler = handlers[i];
+      loop: for(; index < handlers.length; index++) {
+        var handler = handlers[index];
         var type = handler.type;
         var func = handler.func;
         try {
@@ -33,6 +34,9 @@ var stream = function(){
             case 'when':
               func(val);
               break;
+            case 'wait':
+              index = func(val, index);
+              return;
           }
           err = null;
         } catch(ex) {
@@ -40,6 +44,7 @@ var stream = function(){
         }
       }
       if(once) _this.close();
+      index = 0;
     }
 
     this['if'] = this.filter = function(func){
@@ -109,11 +114,37 @@ var stream = function(){
             return false;
           } else {
             throttled = true;
-            setTimeout(function () {
+            setTimeout(function(){
               throttled = false;
-            }, +ms);
+            }, ms);
             return true;
           }
+        }
+      });
+      return _this;
+    };
+
+    this.delay = this.wait = function(ms){
+      handlers.push({
+        type: 'wait',
+        func: function(val, index){
+          setTimeout(function(){
+            handle(val);
+          }, ms || 0);
+          return index + 1;
+        }
+      });
+      return _this;
+    };
+
+    this.restart = this.retrigger = function(ms){
+      handlers.push({
+        type: 'wait',
+        func: function(val, index){
+          setTimeout(function(){
+            handle(val);
+          }, ms || 0);
+          return 0;
         }
       });
       return _this;
@@ -147,6 +178,11 @@ var stream = function(){
     this.once = function(evt){
       once = true;
       return _this.on(evt);
+    };
+
+    this.dispatch = this.trigger = function(evt){
+      handle(evt);
+      return _this;
     };
 
     Object.defineProperty(this, 'and', {

@@ -41,7 +41,7 @@ Sets a function to be called on each streamed event.  Takes in piped data (if no
 
 `Stream#throttle(ms: number): Stream`
 
-Throttles the event stream.  The stream will only pass the throttle a maximum of once time per `ms` milliseconds.
+Throttles the event stream.  The stream will only pass the throttle a maximum of one time per `ms` milliseconds.
 
 `Stream#catch(func: Error => any): Stream`
 
